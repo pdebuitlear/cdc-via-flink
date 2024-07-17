@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.padraigbutler'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+ext {
+    flinkVersion = '1.19.1'
+    flinkCdcVersion = '3.1.0'
+    flinkShadedGuavaVersion = '31.1-jre-17.0'
+}
+
+
+dependencies {
+    implementation "org.apache.flink:flink-java:${flinkVersion}"
+    implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
+    implementation "org.apache.flink:flink-clients:${flinkVersion}"
+    implementation "org.apache.flink:flink-connector-kafka:3.2.0-1.19"
+
+    implementation "org.apache.flink:flink-connector-mysql-cdc:${flinkCdcVersion}"
+//    implementation 'org.apache.flink:flink-shaded-guava:${flinkShadedGuavaVersion}'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+//TODO remove me
+application {
+    mainClass = 'com.padraigbutler.DebeziumTransactionReconstructor'
+}
+
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.padraigbutler.DebeziumTransactionReconstructor'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}

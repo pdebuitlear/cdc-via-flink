@@ -1,0 +1,1 @@
+flink run build/libs/cdc-via-cdc-1.0-SNAPSHOT.jar

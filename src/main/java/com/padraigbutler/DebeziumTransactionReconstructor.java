@@ -169,69 +169,6 @@ public class DebeziumTransactionReconstructor {
         }
     }
 
-    public static abstract class DebeziumEvent {
-        private final String transactionId;
-
-        public DebeziumEvent(String transactionId) {
-            this.transactionId = transactionId;
-        }
-
-        public String getTransactionId() {
-            return transactionId;
-        }
-    }
-
-    public static class DebeziumChangeEvent extends DebeziumEvent {
-        private final String operation;
-        private final long timestamp;
-        private final JsonNode before;
-        private final JsonNode after;
-
-        public DebeziumChangeEvent(String operation, String transactionId, long timestamp, JsonNode before, JsonNode after) {
-            super(transactionId);
-            this.operation = operation;
-            this.timestamp = timestamp;
-            this.before = before;
-            this.after = after;
-        }
-
-        // Getters
-        public String getOperation() { return operation; }
-        public long getTimestamp() { return timestamp; }
-        public JsonNode getBefore() { return before; }
-        public JsonNode getAfter() { return after; }
-
-        @Override
-        public String toString() {
-            return "DebeziumChangeEvent{" +
-                    "transactionId='" + this.getTransactionId() + '\'' +
-                    ", after=" + this.getAfter() +
-                    '}';
-        }
-    }
-
-    public static class DebeziumTransactionEvent extends DebeziumEvent {
-        private final String status;
-        private final long eventCount;
-
-        public DebeziumTransactionEvent(String transactionId, String status, long eventCount) {
-            super(transactionId);
-            this.status = status;
-            this.eventCount = eventCount;
-        }
-
-        public String getStatus() { return status; }
-        public long getEventCount() { return eventCount; }
-
-        @Override
-        public String toString() {
-            return "DebeziumTransactionEvent{" +
-                    "transactionId='" + this.getTransactionId() + '\'' +
-                    ", status=" + this.getStatus() +
-                    '}';
-        }
-    }
-
     public static class TransactionState {
         private final String transactionId;
         private final List<DebeziumChangeEvent> events;

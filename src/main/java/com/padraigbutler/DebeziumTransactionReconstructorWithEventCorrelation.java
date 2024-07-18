@@ -206,7 +206,6 @@ public class DebeziumTransactionReconstructorWithEventCorrelation {
         }
     }
 
-    // Other classes (DebeziumEvent, DebeziumChangeEvent, DebeziumTransactionEvent, TransactionState) remain the same
 
     public static class CorrelatedEvent {
         private final DebeziumChangeEvent changeEvent;
